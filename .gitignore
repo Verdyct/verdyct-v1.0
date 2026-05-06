@@ -1,0 +1,8 @@
+.env
+.env.local
+.env*.local
+client/.next/
+client/node_modules/
+server/__pycache__/
+server/venv/
+server/.env
