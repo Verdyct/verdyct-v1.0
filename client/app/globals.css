@@ -1,26 +1,76 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand */
+  --color-primary: #FF70B5;
+  --color-primary-foreground: #0A0A0A;
+
+  /* Backgrounds & surfaces — built from #F8F9FB base */
+  --color-background: #F8F9FB;   /* canvas: main content area */
+  --color-surface-0: #FAFAFA;    /* sidebar, elevated panels */
+  --color-surface-1: #F1F3F8;    /* nav active bg, card resting state */
+  --color-surface-2: #E9EBF2;    /* input bg, hover states */
+  --color-surface-3: #DDE0EA;    /* pressed states, strong dividers */
+
+  /* Semantic tokens */
+  --color-foreground: #0D0F14;
+  --color-muted: #F1F3F8;
+  --color-muted-foreground: rgba(13, 15, 20, 0.5);
+  --color-secondary: #F1F3F8;
+  --color-secondary-foreground: #0D0F14;
+  --color-destructive: #ef4444;
+
+  /* Borders & inputs */
+  --color-border: rgba(13, 15, 20, 0.07);
+  --color-border-strong: rgba(13, 15, 20, 0.13);
+  --color-input: #E9EBF2;
+  --color-ring: #FF70B5;
+
+  /* Text hierarchy */
+  --color-text: #0D0F14;
+  --color-text-secondary: rgba(13, 15, 20, 0.55);
+  --color-text-tertiary: rgba(13, 15, 20, 0.38);
+  --color-text-disabled: rgba(13, 15, 20, 0.25);
+
+  /* Radius */
+  --radius-md: 8px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-satoshi);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Brand */
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+
+  /* Surfaces */
+  --color-background: var(--color-background);
+  --color-surface-0: var(--color-surface-0);
+  --color-surface-1: var(--color-surface-1);
+  --color-surface-2: var(--color-surface-2);
+  --color-surface-3: var(--color-surface-3);
+
+  /* Semantic */
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+  --color-destructive: var(--color-destructive);
+
+  /* Borders */
+  --color-border: var(--color-border);
+  --color-input: var(--color-input);
+  --color-ring: var(--color-ring);
+
+  /* Text */
+  --color-text: var(--color-text);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-tertiary: var(--color-text-tertiary);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-satoshi), sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
 }
