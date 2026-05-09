@@ -57,7 +57,7 @@ export default function TopBar() {
   return (
     <>
       <header
-        className="flex items-center gap-4 px-5 h-[52px] shrink-0 border-b"
+        className="flex items-center gap-4 px-5 h-13 shrink-0 border-b"
         style={{
           background: "var(--color-surface-0)",
           borderColor: "var(--color-border)",
@@ -65,7 +65,7 @@ export default function TopBar() {
       >
         {/* Search trigger */}
         <button
-          className="flex items-center gap-2.5 flex-1 max-w-[480px] h-8 pl-3 pr-1.5 rounded-lg text-sm text-left transition-colors duration-75"
+          className="flex items-center gap-2.5 flex-1 max-w-120 h-8 pl-3 pr-1.5 rounded-lg text-sm text-left transition-colors duration-75"
           style={{
             background: "#FFFFFF",
             border: "1px solid var(--color-border-strong)",
@@ -90,8 +90,8 @@ export default function TopBar() {
             Rechercher un dossier, un importateur, une référence SH...
           </span>
           <KbdGroup className="ml-auto shrink-0 gap-0.5">
-            <Kbd className="bg-[rgba(13,15,20,0.04)] border-0 shadow-none text-[var(--color-text-tertiary)] rounded-[5px]">⌘</Kbd>
-            <Kbd className="bg-[rgba(13,15,20,0.04)] border-0 shadow-none text-[var(--color-text-tertiary)] rounded-[5px]">K</Kbd>
+            <Kbd className="bg-[rgba(13,15,20,0.04)] border-0 shadow-none text-text-tertiary rounded-[5px]">⌘</Kbd>
+            <Kbd className="bg-[rgba(13,15,20,0.04)] border-0 shadow-none text-text-tertiary rounded-[5px]">K</Kbd>
           </KbdGroup>
         </button>
 
@@ -232,7 +232,7 @@ export default function TopBar() {
             <PopoverContent
               align="end"
               sideOffset={6}
-              className="w-[220px] p-1.5 rounded-xl border-0 shadow-[0_6px_24px_rgba(0,0,0,0.06),0_0_0_1px_rgba(13,15,20,0.04)]"
+              className="w-55 p-1.5 rounded-xl border-0 shadow-[0_6px_24px_rgba(0,0,0,0.06),0_0_0_1px_rgba(13,15,20,0.04)]"
               style={{ background: "#FFFFFF" }}
             >
               {helpLinks.map((link, i) => (
@@ -262,7 +262,7 @@ export default function TopBar() {
       <CommandDialog
         open={open}
         onOpenChange={setOpen}
-        className="sm:max-w-[540px] p-0"
+        className="sm:max-w-135 p-0"
       >
         <Command
           className="rounded-xl"
@@ -290,7 +290,7 @@ export default function TopBar() {
               }}
             />
           </div>
-          <CommandList className="max-h-[320px] p-1.5">
+          <CommandList className="max-h-80 p-1.5">
             <CommandEmpty
               className="py-8 text-center text-sm"
               style={{ color: "var(--color-text-tertiary)" }}
@@ -299,7 +299,7 @@ export default function TopBar() {
             </CommandEmpty>
             <CommandGroup
               heading="Dossiers récents"
-              className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider"
+              className="**:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider"
             >
               <CommandItem className="px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]" style={{ color: "var(--color-text)" }}>
                 Dossier #2024-001 — ACME Import
@@ -314,7 +314,7 @@ export default function TopBar() {
             <CommandSeparator style={{ background: "var(--color-border)" }} />
             <CommandGroup
               heading="Navigation"
-              className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider"
+              className="**:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider"
             >
               <CommandItem className="px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]" style={{ color: "var(--color-text)" }}>
                 Tableau de bord
