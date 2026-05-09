@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Sidebar from "@/components/Sidebar";
+import TopBar from "@/components/TopBar";
 import "./globals.css";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const satoshi = localFont({
   src: [
@@ -28,10 +33,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${satoshi.variable} h-full antialiased`}>
+    <html lang="fr" className={cn("h-full", "antialiased", satoshi.variable, "font-sans", geist.variable)}>
       <body className="flex h-screen overflow-hidden">
         <Sidebar />
-        <main className="flex-1 overflow-auto">{children}</main>
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <TopBar />
+          <main className="flex-1 overflow-auto">{children}</main>
+        </div>
       </body>
     </html>
   );
