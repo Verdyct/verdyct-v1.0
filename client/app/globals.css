@@ -187,3 +187,13 @@ body {
 [cmdk-input]::placeholder {
   color: var(--color-text-tertiary);
 }
+
+[data-upload-context]::placeholder {
+  color: rgba(13, 15, 20, 0.28);
+}
+
+[data-upload-context]:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: rgba(13, 15, 20, 0.18);
+}

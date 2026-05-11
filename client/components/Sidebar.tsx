@@ -3,14 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  HomeSimple,
-  Folder,
-  Barcode,
-  Group,
-  Settings,
-  CloudUpload,
-} from "iconoir-react";
+import { HomeSimple, Folder, Barcode, Group, Settings, Plus } from "iconoir-react";
+import { useUploadModal } from "@/lib/upload-modal-context";
 
 const navItems = [
   { href: "/", label: "Tableau de Bord", icon: HomeSimple },
@@ -36,12 +30,12 @@ function NavLink({
       className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-75"
       style={{
         color: active ? "var(--color-text)" : "var(--color-text-tertiary)",
-        background: active ? "#EBEBEB" : "transparent",
+        background: active ? "rgba(13,15,20,0.04)" : "transparent",
         fontWeight: active ? 500 : 400,
       }}
       onMouseEnter={(e) => {
         if (!active) {
-          (e.currentTarget as HTMLElement).style.background = "#F2F2F2";
+          (e.currentTarget as HTMLElement).style.background = "rgba(13,15,20,0.06)";
           (e.currentTarget as HTMLElement).style.color = "var(--color-text)";
         }
       }}
@@ -65,6 +59,7 @@ function NavLink({
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { openModal } = useUploadModal();
 
   return (
     <aside
@@ -100,51 +95,21 @@ export default function Sidebar() {
 
       {/* Bottom section */}
       <div className="flex flex-col gap-2 px-3 pb-4">
-        {/* Upload card */}
-        <div
-          className="rounded-2xl p-2"
+        {/* Nouveau Dossier CTA */}
+        <button
+          onClick={() => openModal()}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors duration-75"
           style={{
-            background: "var(--color-surface-0)",
-            border: "1px solid var(--color-border-strong)",
+            border: "1.5px dashed rgba(255,112,181,0.4)",
+            background: "rgba(255,112,181,0.05)",
+            color: "var(--color-primary)",
           }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,112,181,0.10)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,112,181,0.05)"; }}
         >
-          <div
-            className="rounded-lg flex flex-col items-center justify-center gap-2 py-5 px-3 cursor-pointer transition-colors duration-75"
-            style={{
-              border: "1.5px dashed var(--color-primary)",
-              background: "rgba(255, 112, 181, 0.04)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background =
-                "rgba(255, 112, 181, 0.08)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background =
-                "rgba(255, 112, 181, 0.04)";
-            }}
-          >
-            <CloudUpload
-              width={20}
-              height={20}
-              strokeWidth={1.5}
-              style={{ color: "var(--color-primary)" }}
-            />
-            <div className="flex flex-col items-center gap-0.5 text-center">
-              <span
-                className="text-xs font-medium leading-tight"
-                style={{ color: "var(--color-primary)" }}
-              >
-                Déposer un dossier
-              </span>
-              <span
-                className="text-[10px] leading-snug"
-                style={{ color: "rgba(255, 112, 181, 0.85)" }}
-              >
-                PDF, Excel, email
-              </span>
-            </div>
-          </div>
-        </div>
+          <Plus width={14} height={14} strokeWidth={2.25} style={{ color: "inherit" }} />
+          Nouveau Dossier
+        </button>
 
         {/* Paramètres */}
         <NavLink

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
+import UploadModal from "@/components/UploadModal";
+import { UploadModalProvider } from "@/lib/upload-modal-context";
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -35,11 +37,14 @@ export default function RootLayout({
   return (
     <html lang="fr" className={cn("h-full", "antialiased", satoshi.variable, "font-sans", geist.variable)}>
       <body className="flex h-screen overflow-hidden">
-        <Sidebar />
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <TopBar />
-          <main className="flex-1 overflow-auto">{children}</main>
-        </div>
+        <UploadModalProvider>
+          <Sidebar />
+          <div className="flex flex-col flex-1 overflow-hidden">
+            <TopBar />
+            <main className="flex-1 overflow-auto">{children}</main>
+          </div>
+          <UploadModal />
+        </UploadModalProvider>
       </body>
     </html>
   );
