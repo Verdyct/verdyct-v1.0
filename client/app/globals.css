@@ -73,7 +73,7 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-satoshi);
 
   /* Brand */
   --color-primary: var(--color-primary);

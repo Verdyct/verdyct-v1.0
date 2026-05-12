@@ -5,10 +5,7 @@ import TopBar from "@/components/TopBar";
 import UploadModal from "@/components/UploadModal";
 import { UploadModalProvider } from "@/lib/upload-modal-context";
 import "./globals.css";
-import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const satoshi = localFont({
   src: [
@@ -35,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={cn("h-full", "antialiased", satoshi.variable, "font-sans", geist.variable)}>
+    <html lang="fr" className={cn("h-full", "antialiased", satoshi.variable, "font-sans")}>
       <body className="flex h-screen overflow-hidden">
         <UploadModalProvider>
           <Sidebar />
