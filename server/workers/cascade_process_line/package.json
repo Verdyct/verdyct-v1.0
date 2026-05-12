@@ -1,0 +1,22 @@
+{
+  "name": "@verdyct/worker-cascade-process-line",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "types": "./index.ts"
+    }
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@verdyct/db": "workspace:*",
+    "@verdyct/shared-types": "workspace:*",
+    "inngest": "^3.22.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}
