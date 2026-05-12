@@ -2,6 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { CloudUpload, Mail, EditPencil, NavArrowRight, NavArrowLeft, Copy, Check, Xmark } from "iconoir-react";
+
+function VerdyctIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+      <path d="M89.6264 61.4399L108.84 94.3768L88.803 128.686L51.2 64.4592L53.1213 61.4399H89.6264Z" fill="white"/>
+      <path d="M166.479 61.4399L147.266 94.3768L167.303 128.686L204.906 64.4592L202.984 61.4399H166.479Z" fill="white"/>
+      <path d="M96.2138 141.861L128.053 87.2406L159.617 141.861L128.053 194.56L96.2138 141.861Z" fill="white"/>
+    </svg>
+  );
+}
 import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -50,11 +60,13 @@ function CopyIcon({ copied }: { copied: boolean }) {
 }
 
 export default function UploadModal() {
-  const { open, mode, files: initialFiles, closeModal } = useUploadModal();
+  const { open, mode, files: initialFiles, prefill, closeModal } = useUploadModal();
   const [view, setView] = useState<View>("select");
   const [localFiles, setLocalFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
+  const [hsCode, setHsCode] = useState("");
+  const [contextValue, setContextValue] = useState("");
   const emailCopyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function copyEmail() {
@@ -70,9 +82,11 @@ export default function UploadModal() {
   useEffect(() => {
     if (open) {
       setLocalFiles(initialFiles);
-      setView(mode === "manual" ? "manual" : "select");
+      setHsCode(prefill?.hsCode ?? "");
+      setContextValue(prefill?.description ?? "");
+      setView(prefill || mode === "manual" ? "manual" : "select");
     }
-  }, [open, mode, initialFiles]);
+  }, [open, mode, initialFiles, prefill]);
 
   useEffect(() => {
     if (!open) {
@@ -129,7 +143,7 @@ export default function UploadModal() {
               </button>
             )}
             <span className="text-[14px] font-medium tracking-tight" style={{ color: "var(--color-text)" }}>
-              {view === "manual" ? "Saisie manuelle" : "Création de dossier"}
+              {view === "manual" ? "Sans document" : "Création de dossier"}
             </span>
           </div>
           <button
@@ -213,13 +227,13 @@ export default function UploadModal() {
 
             {/* Submit */}
             <button
-              className="w-full h-9 rounded-lg text-[13px] font-medium transition-opacity duration-75 flex items-center justify-center gap-2"
-              style={{ background: "var(--color-primary)", color: "#0A0A0A" }}
+              className="w-full h-9 rounded-lg text-[13px] font-medium transition-opacity duration-75 flex items-center justify-center gap-1.5"
+              style={{ background: "var(--color-primary)", color: "#FFFFFF" }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
             >
-              Soumettre à Verdyct
-              <NavArrowRight width={13} height={13} strokeWidth={2} />
+              Créer le dossier
+              <VerdyctIcon size={20} />
             </button>
           </div>
         )}
@@ -274,7 +288,7 @@ export default function UploadModal() {
 
             <OuDivider />
 
-            {/* Email forward — flat row, same style as dashboard card */}
+            {/* Email forward */}
             <div className="flex flex-col gap-1.5">
               <span className="text-[12.5px] font-medium" style={{ color: "var(--color-text)" }}>
                 Transférer par email
@@ -282,16 +296,17 @@ export default function UploadModal() {
               <div
                 className="flex items-center gap-3 cursor-pointer transition-colors duration-75 rounded-lg px-3 py-2.5"
                 onClick={copyEmail}
+                style={{ border: "1px solid var(--color-border)" }}
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(13,15,20,0.02)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
               >
                 <Mail width={13} height={13} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
-                <span className="text-[11px] flex-1 min-w-0 truncate" style={{ color: "var(--color-text-secondary)" }}>
+                <span className="text-[12px] flex-1 min-w-0 truncate" style={{ color: "var(--color-text-secondary)" }}>
                   {EMAIL}
                 </span>
                 <CopyIcon copied={emailCopied} />
               </div>
-              <p className="text-[11px] px-3" style={{ color: "var(--color-text-tertiary)" }}>
+              <p className="text-[11px] px-1" style={{ color: "var(--color-text-tertiary)" }}>
                 Importez directement depuis votre messagerie
               </p>
             </div>
@@ -299,27 +314,27 @@ export default function UploadModal() {
             <OuDivider />
 
             {/* Manual entry */}
-            <button
-              className="flex items-center gap-3 px-4 py-3.5 rounded-lg text-left w-full transition-colors duration-75"
-              style={{ border: "1px solid var(--color-border)" }}
-              onClick={() => setView("manual")}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(13,15,20,0.02)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
-            >
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[12.5px] font-medium" style={{ color: "var(--color-text)" }}>
+                Sans document
+              </span>
               <div
-                className="flex items-center justify-center size-7 rounded-md shrink-0"
-                style={{ background: "rgba(13,15,20,0.04)" }}
+                className="flex items-center gap-3 cursor-pointer transition-colors duration-75 rounded-lg px-3 py-2.5"
+                onClick={() => setView("manual")}
+                style={{ border: "1px solid var(--color-border)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(13,15,20,0.02)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
               >
-                <EditPencil width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-secondary)" }} />
+                <EditPencil width={13} height={13} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
+                <span className="text-[12px] flex-1 min-w-0" style={{ color: "var(--color-text-secondary)" }}>
+                  Importateur, contexte, code TARIC
+                </span>
+                <NavArrowRight width={12} height={12} strokeWidth={1.75} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
               </div>
-              <div className="flex-1">
-                <p className="text-[13px] font-medium" style={{ color: "var(--color-text)" }}>Saisir manuellement</p>
-                <p className="text-[11.5px] mt-0.5" style={{ color: "var(--color-text-tertiary)" }}>
-                  Créer un dossier vide et remplir les champs
-                </p>
-              </div>
-              <NavArrowRight width={12} height={12} strokeWidth={1.75} style={{ color: "var(--color-text-tertiary)" }} />
-            </button>
+              <p className="text-[11px] px-1" style={{ color: "var(--color-text-tertiary)" }}>
+                Renseignez l'importateur et le contexte. Verdyct fait le reste.
+              </p>
+            </div>
           </div>
         )}
 
@@ -351,10 +366,25 @@ export default function UploadModal() {
 
             <div className="flex flex-col gap-1.5">
               <label className="text-[11px]" style={{ color: "var(--color-text-tertiary)" }}>
+                Code TARIC <span style={{ opacity: 0.6 }}>(Optionnel)</span>
+              </label>
+              <Input
+                value={hsCode}
+                onChange={(e) => setHsCode(e.target.value)}
+                placeholder="ex: 7318.15.59"
+                className="h-9 text-[13px] focus-visible:ring-0 focus-visible:shadow-none"
+                style={{ borderColor: "var(--color-border-strong)", color: "var(--color-text)", background: "transparent" }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px]" style={{ color: "var(--color-text-tertiary)" }}>
                 Contexte <span style={{ opacity: 0.6 }}>(Optionnel)</span>
               </label>
               <Textarea
                 data-upload-context
+                value={contextValue}
+                onChange={(e) => setContextValue(e.target.value)}
                 placeholder="ex: client utilise toujours DAP, acier grade S355, origine Allemagne"
                 className="min-h-[72px] max-h-[120px] text-[12px] resize-y focus-visible:ring-0 focus-visible:shadow-none"
                 style={{ borderColor: "var(--color-border-strong)", color: "var(--color-text)", background: "transparent" }}
@@ -362,12 +392,13 @@ export default function UploadModal() {
             </div>
 
             <button
-              className="w-full h-9 rounded-lg text-[13px] font-medium transition-opacity duration-75 mt-1"
-              style={{ background: "var(--color-primary)", color: "#0A0A0A" }}
+              className="w-full h-9 rounded-lg text-[13px] font-medium transition-opacity duration-75 mt-1 flex items-center justify-center gap-1.5"
+              style={{ background: "var(--color-primary)", color: "#FFFFFF" }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
             >
               Créer le dossier
+              <VerdyctIcon size={20} />
             </button>
           </div>
         )}

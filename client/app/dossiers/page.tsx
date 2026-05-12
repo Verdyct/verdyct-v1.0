@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Search, NavArrowRight, NavArrowDown, NavArrowLeft, Xmark } from "iconoir-react";
+import { useRouter } from "next/navigation";
+import { Search, NavArrowRight, NavArrowDown, NavArrowLeft, Xmark, Plus } from "iconoir-react";
 import { ALL_DOSSIERS, Dossier, Statut, statutConfig, DossierDrawer } from "@/components/DossiersTable";
+import { useUploadModal } from "@/lib/upload-modal-context";
 
 // ─── Filter data ──────────────────────────────────────────────────────────────
 
@@ -175,7 +177,8 @@ const PAGE_SIZE = 11;
 const TABLE_MAX_HEIGHT = PAGE_SIZE * 40 + 37; // 11 rows × 40px + col-header ~37px
 
 export default function DossiersPage() {
-
+  const { openModal } = useUploadModal();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("Tous");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -186,6 +189,26 @@ export default function DossiersPage() {
 
   // Filter state
   const [statutChecked, setStatutChecked] = useState<Set<Statut>>(new Set());
+
+  // On mount: read ?statut= from URL and pre-apply
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const s = params.get("statut") as Statut | null;
+    const valid: Statut[] = ["Validé", "En attente", "CBAM", "Conflit"];
+    if (s && valid.includes(s)) setStatutChecked(new Set([s]));
+  }, []);
+
+  // Sync statut filter back to URL (skip first mount to avoid overwriting initial URL)
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (!didMount.current) { didMount.current = true; return; }
+    if (statutChecked.size === 1) {
+      const s = [...statutChecked][0];
+      window.history.replaceState(null, "", `/dossiers?statut=${encodeURIComponent(s)}`);
+    } else {
+      window.history.replaceState(null, "", "/dossiers");
+    }
+  }, [statutChecked]);
   const [importateurChecked, setImportateurChecked] = useState<Set<string>>(new Set());
   const [regimeChecked, setRegimeChecked] = useState<Set<string>>(new Set());
   const [incotermChecked, setIncotermChecked] = useState<Set<string>>(new Set());
@@ -229,12 +252,9 @@ export default function DossiersPage() {
 
   return (
     <div className="p-6 min-h-full" style={{ background: "var(--color-surface-0)" }}>
-      <div
-        className="rounded-xl overflow-hidden flex flex-col"
-        style={{ background: "#FFFFFF", border: "1px solid var(--color-border)" }}
-      >
-        {/* ── Page header ── */}
-        <div className="px-6 pt-6 pb-5 border-b shrink-0" style={{ borderColor: "var(--color-border)" }}>
+      {/* ── Page header ── */}
+      <div className="flex items-center justify-between mb-5">
+        <div>
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--color-text)" }}>
             Dossiers
           </h1>
@@ -242,6 +262,25 @@ export default function DossiersPage() {
             142 dossiers actifs · 38 importateurs
           </p>
         </div>
+        <button
+          onClick={() => openModal()}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-medium transition-colors duration-75"
+          style={{
+            background: "var(--color-primary)",
+            color: "#FFFFFF",
+          }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+        >
+          <Plus width={14} height={14} strokeWidth={2.25} style={{ color: "inherit" }} />
+          Nouveau dossier
+        </button>
+      </div>
+
+      <div
+        className="rounded-xl overflow-hidden flex flex-col"
+        style={{ background: "#FFFFFF", border: "1px solid var(--color-border)" }}
+      >
 
         {/* ── Tab bar ── */}
         <div className="flex items-center gap-1 px-6 border-b shrink-0" style={{ borderColor: "var(--color-border)" }}>
