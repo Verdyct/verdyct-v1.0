@@ -38,7 +38,7 @@ export default function AlertesCard() {
 
   function handleCta(action: string) {
     if (action === "cbam") {
-      router.push("/dossiers?statut=CBAM");
+      router.push("/dashboard/dossiers?statut=CBAM");
     } else if (action === "reconcile") {
       setReconcileOpen(true);
     }

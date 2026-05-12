@@ -7,10 +7,10 @@ import { HomeSimple, Folder, Barcode, Group, Settings, Plus } from "iconoir-reac
 import { useUploadModal } from "@/lib/upload-modal-context";
 
 const navItems = [
-  { href: "/", label: "Tableau de Bord", icon: HomeSimple },
-  { href: "/dossiers", label: "Dossiers", icon: Folder },
-  { href: "/classificateur", label: "Classificateur SH", icon: Barcode },
-  { href: "/importateurs", label: "Importateurs", icon: Group },
+  { href: "/dashboard", label: "Tableau de Bord", icon: HomeSimple },
+  { href: "/dashboard/dossiers", label: "Dossiers", icon: Folder },
+  { href: "/dashboard/classificateur", label: "Classificateur SH", icon: Barcode },
+  { href: "/dashboard/importateurs", label: "Importateurs", icon: Group },
 ];
 
 function NavLink({
@@ -61,6 +61,10 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { openModal } = useUploadModal();
 
+  function isActive(href: string) {
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }
+
   return (
     <aside
       className="flex flex-col w-60 h-screen shrink-0 border-r"
@@ -88,7 +92,7 @@ export default function Sidebar() {
             href={href}
             label={label}
             icon={icon}
-            active={pathname === href}
+            active={isActive(href)}
           />
         ))}
       </nav>
@@ -113,10 +117,10 @@ export default function Sidebar() {
 
         {/* Paramètres */}
         <NavLink
-          href="/parametres"
+          href="/dashboard/parametres"
           label="Paramètres"
           icon={Settings}
-          active={pathname === "/parametres"}
+          active={isActive("/dashboard/parametres")}
         />
       </div>
     </aside>

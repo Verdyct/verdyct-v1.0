@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Sidebar from "@/components/Sidebar";
-import TopBar from "@/components/TopBar";
-import UploadModal from "@/components/UploadModal";
-import { UploadModalProvider } from "@/lib/upload-modal-context";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +19,7 @@ const satoshi = localFont({
 
 export const metadata: Metadata = {
   title: "Verdyct",
-  description: "Verdyct",
+  description: "Le système d'exploitation métier pour commissionnaires en douane.",
 };
 
 export default function RootLayout({
@@ -33,16 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={cn("h-full", "antialiased", satoshi.variable, "font-sans")}>
-      <body className="flex h-screen overflow-hidden">
-        <UploadModalProvider>
-          <Sidebar />
-          <div className="flex flex-col flex-1 overflow-hidden">
-            <TopBar />
-            <main className="flex-1 overflow-auto">{children}</main>
-          </div>
-          <UploadModal />
-        </UploadModalProvider>
-      </body>
+      <body className="min-h-screen bg-background text-foreground">{children}</body>
     </html>
   );
 }

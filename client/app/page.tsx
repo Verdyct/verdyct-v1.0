@@ -1,125 +1,47 @@
-import { Folder, WarningTriangle, Mail, ArrowUp } from "iconoir-react";
-import DossiersTable from "@/components/DossiersTable";
-import UploadCard from "@/components/UploadCard";
-import AlertesCard from "@/components/AlertesCard";
+import Image from "next/image";
+import { NotifyForm } from "@/components/NotifyForm";
 
-const labelStyle = {
-  fontSize: "13px",
-  fontWeight: 400,
-  color: "var(--color-text-secondary)",
-} as const;
-
-const numberStyle = {
-  fontSize: "36px",
-  fontWeight: 600,
-  lineHeight: 1,
-  letterSpacing: "-0.03em",
-  color: "var(--color-text)",
-} as const;
-
-const cardStyle = {
-  background: "#FFFFFF",
-  border: "1px solid var(--color-border)",
-} as const;
-
-const dividerStyle = {
-  borderColor: "var(--color-border)",
-} as const;
-
-export default function TableauDeBord() {
+export default function ComingSoonPage() {
   return (
-    <div className="p-6 min-h-full" style={{ background: "var(--color-surface-0)" }}>
-      {/* Greeting */}
-      <div className="mb-5">
-        <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "var(--color-text)" }}>
-          Bonjour, Julius
-        </h1>
-        <p className="text-[14px] mt-0.5" style={{ color: "var(--color-text-tertiary)" }}>
-          Vendredi 10 mai 2026
-        </p>
-      </div>
+    <main
+      className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-16"
+      style={{
+        background:
+          "radial-gradient(circle at top, rgba(255,112,181,0.10), transparent 32%), linear-gradient(180deg, #fbfbfc 0%, #f4f5f8 100%)",
+      }}
+    >
+      <section className="relative mx-auto flex w-full max-w-2xl flex-col items-center gap-14 text-center">
+        <div className="flex flex-col items-center gap-5">
+          <Image
+            src="/assets/images/brand/verdyct-logo.svg"
+            alt="Verdyct"
+            width={80}
+            height={80}
+            priority
+            className="h-20 w-20"
+          />
 
-      {/* ── Stat cards ── */}
-      <div
-        className="grid gap-3"
-        style={{ gridTemplateColumns: "minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr)" }}
-      >
-        {/* Card 1 — Total Dossiers */}
-        <div className="rounded-xl p-5 flex flex-col justify-between gap-4" style={cardStyle}>
-          <div>
-            <div className="flex items-center gap-2">
-              <Folder width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)" }} />
-              <span style={labelStyle}>Total Dossiers</span>
-            </div>
-            <div className="flex items-end gap-3 mt-3">
-              <span style={numberStyle}>247</span>
-              <div className="flex items-center gap-1 pb-0.5">
-                <ArrowUp width={11} height={11} strokeWidth={2.5} style={{ color: "var(--color-primary)" }} />
-                <span className="text-[12.5px]" style={{ color: "var(--color-primary)" }}>
-                  +18 vs la semaine passée
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between pt-3 border-t" style={dividerStyle}>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[14.5px] tabular-nums font-semibold" style={{ color: "#b45309" }}>23</span>
-              <span style={labelStyle}>à valider</span>
-            </div>
-            <span style={labelStyle}>SLA 94%</span>
+          <div className="max-w-sm space-y-3 sm:max-w-md">
+            <h1
+              className="text-2xl font-medium tracking-[-0.04em] text-balance sm:text-3xl"
+              style={{ color: "var(--color-text)" }}
+            >
+              Traitez vos dossiers de douane en{" "}
+              <span style={{ color: "var(--color-primary)" }}>90 secondes</span>
+              , pas 45 minutes.
+            </h1>
+            <p
+              className="text-[0.9375rem] leading-6 tracking-[-0.01em] sm:text-base"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              Automatisez l&apos;extraction documentaire, la classification TARIC et la
+              conformite CBAM. Concu pour les commissionnaires en douane independants.
+            </p>
           </div>
         </div>
 
-        {/* Card 2 — CBAM Flaggés */}
-        <div className="rounded-xl p-5 flex flex-col justify-between gap-4" style={cardStyle}>
-          <div>
-            <div className="flex items-center gap-2">
-              <WarningTriangle width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)" }} />
-              <span style={labelStyle}>CBAM Flaggés</span>
-            </div>
-            <span className="mt-3 block" style={numberStyle}>7</span>
-          </div>
-          <div className="flex items-center gap-2 pt-3 border-t" style={dividerStyle}>
-            <span className="text-[12.5px]" style={{ color: "var(--color-text-secondary)" }}>
-              <span style={{ color: "var(--color-text)" }}>3</span> Acier
-            </span>
-            <span className="text-[11px]" style={{ color: "var(--color-border-strong)" }}>·</span>
-            <span className="text-[12.5px]" style={{ color: "var(--color-text-secondary)" }}>
-              <span style={{ color: "var(--color-text)" }}>2</span> Aluminium
-            </span>
-            <span className="text-[11px]" style={{ color: "var(--color-border-strong)" }}>·</span>
-            <span className="text-[12.5px]" style={{ color: "var(--color-text-secondary)" }}>
-              <span style={{ color: "var(--color-text)" }}>2</span> Ciment
-            </span>
-          </div>
-        </div>
-
-        {/* Card 3 — Conflits Email */}
-        <div className="rounded-xl p-5 flex flex-col justify-between gap-4" style={cardStyle}>
-          <div>
-            <div className="flex items-center gap-2">
-              <Mail width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)" }} />
-              <span style={labelStyle}>Conflits Email</span>
-            </div>
-            <span className="mt-3 block" style={numberStyle}>4</span>
-          </div>
-          <div className="flex items-center justify-between pt-3 border-t" style={dividerStyle}>
-            <div className="flex items-center gap-1.5">
-              <div className="size-1.5 rounded-full shrink-0" style={{ background: "#f59e0b" }} />
-              <span className="text-[12.5px]" style={{ color: "var(--color-text-secondary)" }}>+2 aujourd'hui</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Dossiers récents + right column ── */}
-      <div className="mt-3 grid gap-3" style={{ gridTemplateColumns: "2fr 1fr" }}>
-        <DossiersTable />
-        <div className="flex flex-col gap-3">
-          <UploadCard />
-          <AlertesCard />
-        </div>
-      </div>
-    </div>
+        <NotifyForm />
+      </section>
+    </main>
   );
 }

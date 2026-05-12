@@ -1475,7 +1475,7 @@ export default function DossiersTable() {
 
           {/* Footer */}
           <Link
-            href="/dossiers"
+            href="/dashboard/dossiers"
             className="flex items-center justify-center gap-1.5 py-3 border-t text-[13px] transition-colors duration-75"
             style={{ borderColor: "var(--color-border)", color: "var(--color-text-tertiary)" }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-text)"; }}

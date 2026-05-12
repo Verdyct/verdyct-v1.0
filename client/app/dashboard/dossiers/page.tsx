@@ -204,9 +204,9 @@ export default function DossiersPage() {
     if (!didMount.current) { didMount.current = true; return; }
     if (statutChecked.size === 1) {
       const s = [...statutChecked][0];
-      window.history.replaceState(null, "", `/dossiers?statut=${encodeURIComponent(s)}`);
+      window.history.replaceState(null, "", `/dashboard/dossiers?statut=${encodeURIComponent(s)}`);
     } else {
-      window.history.replaceState(null, "", "/dossiers");
+      window.history.replaceState(null, "", "/dashboard/dossiers");
     }
   }, [statutChecked]);
   const [importateurChecked, setImportateurChecked] = useState<Set<string>>(new Set());
