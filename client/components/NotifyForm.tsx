@@ -94,6 +94,13 @@ export function NotifyForm() {
           {message}
         </p>
       ) : null}
+
+      <p
+        className="text-sm tracking-[-0.01em]"
+        style={{ color: "var(--color-text-tertiary)" }}
+      >
+        Lancement le 1er juin 2026
+      </p>
     </div>
   );
 }
