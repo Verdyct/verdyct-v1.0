@@ -62,6 +62,7 @@ export default function Sidebar() {
   const { openModal } = useUploadModal();
 
   function isActive(href: string) {
+    if (href === "/dashboard") return pathname === "/dashboard";
     return pathname === href || pathname.startsWith(`${href}/`);
   }
 

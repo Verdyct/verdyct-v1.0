@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Search, NavArrowRight, NavArrowDown, NavArrowLeft, Xmark, Plus } from "iconoir-react";
 import { ALL_DOSSIERS, Dossier, Statut, statutConfig, DossierDrawer } from "@/components/DossiersTable";
 import { useUploadModal } from "@/lib/upload-modal-context";
+import { Input } from "@/components/ui/input";
 
 // ─── Filter data ──────────────────────────────────────────────────────────────
 
@@ -305,21 +306,24 @@ export default function DossiersPage() {
         {/* ── Search + filter bar ── */}
         <div className="flex items-center gap-3 px-6 py-3 border-b shrink-0" style={{ borderColor: "var(--color-border)" }}>
           {/* Search */}
-          <div
-            className="flex items-center gap-2 px-3 h-8 rounded-lg flex-1 max-w-xs"
-            style={{ border: "1px solid var(--color-border-strong)", background: "rgba(13,15,20,0.02)" }}
-          >
-            <Search width={13} height={13} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
-            <input
-              type="text"
+          <div className="relative flex-1 max-w-xs">
+            <Search
+              width={13} height={13} strokeWidth={1.5}
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
+              style={{ color: "var(--color-text-tertiary)" }}
+            />
+            <Input
               placeholder="Rechercher..."
               value={search}
               onChange={(e) => { setSearch(e.target.value); resetPage(); }}
-              className="flex-1 text-[13px] bg-transparent outline-none placeholder:opacity-40"
-              style={{ color: "var(--color-text)" }}
+              className="pl-8 pr-8 text-[13px] h-8 focus-visible:ring-1"
             />
             {search && (
-              <button onClick={() => { setSearch(""); resetPage(); }} style={{ color: "var(--color-text-tertiary)" }}>
+              <button
+                onClick={() => { setSearch(""); resetPage(); }}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2"
+                style={{ color: "var(--color-text-tertiary)" }}
+              >
                 <Xmark width={12} height={12} strokeWidth={1.75} />
               </button>
             )}
