@@ -368,7 +368,7 @@ export default function ImportateurFiche({ params }: { params: Promise<{ id: str
                         className="h-full rounded-full"
                         style={{
                           width: `${p.tauxAcceptance}%`,
-                          background: p.tauxAcceptance >= 95 ? "#16a34a" : p.tauxAcceptance >= 85 ? "#d97706" : "#dc2626",
+                          background: p.tauxAcceptance >= 80 ? "#16a34a" : p.tauxAcceptance >= 65 ? "#d97706" : "#dc2626",
                         }}
                       />
                     </div>

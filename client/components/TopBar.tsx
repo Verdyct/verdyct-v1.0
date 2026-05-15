@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Bell, HelpCircle, OpenBook, KeyBack, Megaphone, ChatBubbleQuestion, ArrowRight } from "iconoir-react";
+import { useRouter } from "next/navigation";
+import { Search, Bell, HelpCircle, OpenBook, KeyBack, Megaphone, ChatBubbleQuestion, ArrowRight, HomeSimple, Folder, Barcode, Group, BookStack, Journal, Settings, Plus } from "iconoir-react";
+import { useUploadModal } from "@/lib/upload-modal-context";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { Command as CommandPrimitive } from "cmdk";
 import {
@@ -50,9 +52,26 @@ const helpLinks = [
   { icon: ChatBubbleQuestion, label: "Contacter le support", shortcut: null },
 ];
 
+const NAV_ESPACE = [
+  { icon: HomeSimple, label: "Tableau de Bord",    href: "/dashboard" },
+  { icon: Folder,     label: "Dossiers",            href: "/dashboard/dossiers" },
+  { icon: Barcode,    label: "Classificateur SH",   href: "/dashboard/classificateur" },
+  { icon: Group,      label: "Importateurs",         href: "/dashboard/importateurs" },
+];
+
+const NAV_OUTILS = [
+  { icon: BookStack, label: "Nomenclatures",       href: "/dashboard/nomenclatures" },
+  { icon: Journal,   label: "Journal d'activité",  href: "/dashboard/journal" },
+];
+
+const ITEM_CLS = "px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]";
+const GROUP_CLS = "**:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider";
+
 export default function TopBar() {
   const [open, setOpen] = useState(false);
   const [allRead, setAllRead] = useState(false);
+  const router = useRouter();
+  const { openModal } = useUploadModal();
 
   return (
     <>
@@ -232,27 +251,37 @@ export default function TopBar() {
             <PopoverContent
               align="end"
               sideOffset={6}
-              className="w-55 p-1.5 rounded-xl border-0 shadow-[0_6px_24px_rgba(0,0,0,0.06),0_0_0_1px_rgba(13,15,20,0.04)]"
+              className="w-[220px] p-0 gap-0 rounded-xl border-0 shadow-[0_6px_24px_rgba(0,0,0,0.06),0_0_0_1px_rgba(13,15,20,0.04)]"
               style={{ background: "#FFFFFF" }}
             >
-              {helpLinks.map((link, i) => (
-                <button
-                  key={i}
-                  className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-colors duration-75 text-left"
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.05)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
-                >
-                  <link.icon width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
-                  <span className="flex-1 text-[13px]" style={{ color: "var(--color-text)" }}>
-                    {link.label}
-                  </span>
-                  {link.shortcut && (
-                    <span className="text-[11px] font-mono" style={{ color: "var(--color-text-tertiary)" }}>
-                      {link.shortcut}
+              <div
+                className="px-4 pt-4 pb-3 border-b"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                <span className="text-[13px] font-semibold" style={{ color: "var(--color-text)" }}>
+                  Aide
+                </span>
+              </div>
+              <div className="p-1.5">
+                {helpLinks.map((link, i) => (
+                  <button
+                    key={i}
+                    className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-colors duration-75 text-left"
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.05)"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                  >
+                    <link.icon width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
+                    <span className="flex-1 text-[13px]" style={{ color: "var(--color-text)" }}>
+                      {link.label}
                     </span>
-                  )}
-                </button>
-              ))}
+                    {link.shortcut && (
+                      <span className="text-[11px]" style={{ color: "var(--color-text-tertiary)" }}>
+                        {link.shortcut}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
             </PopoverContent>
           </Popover>
 
@@ -290,40 +319,101 @@ export default function TopBar() {
               }}
             />
           </div>
-          <CommandList className="max-h-80 p-1.5">
+          <CommandList className="max-h-[380px] p-1.5">
             <CommandEmpty
               className="py-8 text-center text-sm"
               style={{ color: "var(--color-text-tertiary)" }}
             >
               Aucun résultat trouvé.
             </CommandEmpty>
-            <CommandGroup
-              heading="Dossiers récents"
-              className="**:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider"
-            >
-              <CommandItem className="px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]" style={{ color: "var(--color-text)" }}>
-                Dossier #2024-001 — ACME Import
-              </CommandItem>
-              <CommandItem className="px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]" style={{ color: "var(--color-text)" }}>
-                Dossier #2024-042 — Logistics Pro
-              </CommandItem>
-              <CommandItem className="px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]" style={{ color: "var(--color-text)" }}>
-                Dossier #2024-078 — Global Trade SAS
+
+            {/* Action */}
+            <CommandGroup heading="Action" className={GROUP_CLS}>
+              <CommandItem
+                className={ITEM_CLS}
+                style={{ color: "var(--color-primary)" }}
+                onSelect={() => { setOpen(false); openModal(); }}
+              >
+                <div className="flex items-center gap-2.5 w-full">
+                  <Plus width={14} height={14} strokeWidth={2} style={{ color: "var(--color-primary)", flexShrink: 0 }} />
+                  <span className="flex-1">Nouveau dossier</span>
+                  <KbdGroup className="gap-0.5">
+                    <Kbd className="bg-[rgba(13,15,20,0.04)] border-0 shadow-none rounded-[5px] text-[10px]" style={{ color: "var(--color-text-tertiary)" }}>⌘</Kbd>
+                    <Kbd className="bg-[rgba(13,15,20,0.04)] border-0 shadow-none rounded-[5px] text-[10px]" style={{ color: "var(--color-text-tertiary)" }}>N</Kbd>
+                  </KbdGroup>
+                </div>
               </CommandItem>
             </CommandGroup>
+
             <CommandSeparator style={{ background: "var(--color-border)" }} />
-            <CommandGroup
-              heading="Navigation"
-              className="**:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:py-1.5 **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider"
-            >
-              <CommandItem className="px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]" style={{ color: "var(--color-text)" }}>
-                Tableau de bord
-              </CommandItem>
-              <CommandItem className="px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]" style={{ color: "var(--color-text)" }}>
-                Nouveaux dossiers
-              </CommandItem>
-              <CommandItem className="px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]" style={{ color: "var(--color-text)" }}>
-                Paramètres
+
+            {/* Recent dossiers */}
+            <CommandGroup heading="Dossiers récents" className={GROUP_CLS}>
+              {[
+                { id: "#2024-001", label: "ACME Import" },
+                { id: "#2024-042", label: "Logistics Pro" },
+                { id: "#2024-078", label: "Global Trade SAS" },
+              ].map(({ id, label }) => (
+                <CommandItem
+                  key={id}
+                  className={ITEM_CLS}
+                  style={{ color: "var(--color-text)" }}
+                  onSelect={() => { setOpen(false); router.push("/dashboard/dossiers"); }}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Folder width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
+                    <span>Dossier {id}</span>
+                    <span style={{ color: "var(--color-text-tertiary)" }}>{label}</span>
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+
+            <CommandSeparator style={{ background: "var(--color-border)" }} />
+
+            {/* Espace */}
+            <CommandGroup heading="Espace" className={GROUP_CLS}>
+              {NAV_ESPACE.map(({ icon: Icon, label, href }) => (
+                <CommandItem
+                  key={href}
+                  className={ITEM_CLS}
+                  style={{ color: "var(--color-text)" }}
+                  onSelect={() => { setOpen(false); router.push(href); }}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icon width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
+                    {label}
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+
+            <CommandSeparator style={{ background: "var(--color-border)" }} />
+
+            {/* Outils */}
+            <CommandGroup heading="Outils" className={GROUP_CLS}>
+              {NAV_OUTILS.map(({ icon: Icon, label, href }) => (
+                <CommandItem
+                  key={href}
+                  className={ITEM_CLS}
+                  style={{ color: "var(--color-text)" }}
+                  onSelect={() => { setOpen(false); router.push(href); }}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icon width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
+                    {label}
+                  </div>
+                </CommandItem>
+              ))}
+              <CommandItem
+                className={ITEM_CLS}
+                style={{ color: "var(--color-text)" }}
+                onSelect={() => { setOpen(false); router.push("/dashboard/parametres"); }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Settings width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
+                  Paramètres
+                </div>
               </CommandItem>
             </CommandGroup>
           </CommandList>
