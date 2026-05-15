@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Bell, HelpCircle, OpenBook, KeyBack, Megaphone, ChatBubbleQuestion, ArrowRight, HomeSimple, Folder, Barcode, Group, BookStack, Journal, Settings, Plus } from "iconoir-react";
 import { useUploadModal } from "@/lib/upload-modal-context";
+import { useSettingsModal } from "@/lib/settings-modal-context";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { Command as CommandPrimitive } from "cmdk";
 import {
@@ -60,8 +61,8 @@ const NAV_ESPACE = [
 ];
 
 const NAV_OUTILS = [
-  { icon: BookStack, label: "Nomenclatures",       href: "/dashboard/nomenclatures" },
-  { icon: Journal,   label: "Journal d'activité",  href: "/dashboard/journal" },
+  { icon: BookStack, label: "Nomenclatures",       href: "/dashboard/nomenclatures", soon: false },
+  { icon: Journal,   label: "Journal d'activité",  href: "/dashboard/journal",       soon: true  },
 ];
 
 const ITEM_CLS = "px-2 py-2 text-[13px] rounded-md cursor-pointer data-[selected=true]:bg-[rgba(13,15,20,0.04)]";
@@ -72,6 +73,7 @@ export default function TopBar() {
   const [allRead, setAllRead] = useState(false);
   const router = useRouter();
   const { openModal } = useUploadModal();
+  const { openSettings } = useSettingsModal();
 
   return (
     <>
@@ -392,23 +394,41 @@ export default function TopBar() {
 
             {/* Outils */}
             <CommandGroup heading="Outils" className={GROUP_CLS}>
-              {NAV_OUTILS.map(({ icon: Icon, label, href }) => (
-                <CommandItem
-                  key={href}
-                  className={ITEM_CLS}
-                  style={{ color: "var(--color-text)" }}
-                  onSelect={() => { setOpen(false); router.push(href); }}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
-                    {label}
+              {NAV_OUTILS.map(({ icon: Icon, label, href, soon }) =>
+                soon ? (
+                  <div
+                    key={href}
+                    className="flex items-center gap-2.5 px-2 py-2 rounded-md text-[13px] select-none"
+                    style={{ color: "var(--color-text-tertiary)", opacity: 0.5, cursor: "default" }}
+                    aria-disabled="true"
+                  >
+                    <Icon width={14} height={14} strokeWidth={1.5} style={{ flexShrink: 0 }} />
+                    <span className="flex-1">{label}</span>
+                    <span
+                      className="text-[9.5px] font-medium px-1.5 py-0.5 rounded-full"
+                      style={{ background: "rgba(13,15,20,0.07)", letterSpacing: "0.03em" }}
+                    >
+                      Bientôt
+                    </span>
                   </div>
-                </CommandItem>
-              ))}
+                ) : (
+                  <CommandItem
+                    key={href}
+                    className={ITEM_CLS}
+                    style={{ color: "var(--color-text)" }}
+                    onSelect={() => { setOpen(false); router.push(href); }}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Icon width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
+                      {label}
+                    </div>
+                  </CommandItem>
+                )
+              )}
               <CommandItem
                 className={ITEM_CLS}
                 style={{ color: "var(--color-text)" }}
-                onSelect={() => { setOpen(false); router.push("/dashboard/parametres"); }}
+                onSelect={() => { setOpen(false); openSettings(); }}
               >
                 <div className="flex items-center gap-2.5">
                   <Settings width={14} height={14} strokeWidth={1.5} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />

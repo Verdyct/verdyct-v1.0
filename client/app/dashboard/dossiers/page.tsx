@@ -37,7 +37,7 @@ const FENETRES = ["7 jours", "30 jours", "Ce trimestre", "Cette année", "Tout a
 const TABS = ["Tous", "Mes dossiers", "Équipe", "Brouillon"] as const;
 type Tab = typeof TABS[number];
 
-const COLS = "24px 150px 1fr 130px 100px 24px";
+const COLS = "24px 150px 1fr 110px 140px 100px 24px";
 
 // ─── Filter dropdown ──────────────────────────────────────────────────────────
 
@@ -549,7 +549,7 @@ export default function DossiersPage() {
                 <span className="block w-2 h-px" style={{ background: "var(--color-text)" }} />
               )}
             </div>
-            {["Référence", "Importateur", "Statut", "Flags", ""].map((col) => (
+            {["Référence", "Importateur", "Date", "Statut", "Flags", ""].map((col) => (
               <span key={col} className="text-[12px]" style={{ color: "var(--color-text-tertiary)" }}>
                 {col}
               </span>
@@ -598,11 +598,15 @@ export default function DossiersPage() {
                 <span className="text-[13.5px] truncate pr-4 cursor-pointer" style={{ color: "var(--color-text)" }} onClick={() => setOpenDossier(d)}>
                   {d.importateur}
                 </span>
+                <span className="text-[12.5px] tabular-nums cursor-pointer" style={{ color: "var(--color-text-tertiary)" }} onClick={() => setOpenDossier(d)}>
+                  {d.date}
+                </span>
                 <div className="flex items-center cursor-pointer" onClick={() => setOpenDossier(d)}>
                   <span
-                    className="inline-flex items-center text-[12px] px-2 py-0.5 rounded-md"
+                    className="inline-flex items-center gap-1.5 text-[12px] px-2 py-0.5 rounded-md"
                     style={{ background: badge.bg, color: badge.color }}
                   >
+                    <badge.icon width={11} height={11} strokeWidth={2} style={{ color: "inherit", flexShrink: 0 }} />
                     {d.statut}
                   </span>
                 </div>

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { HomeSimple, Folder, Barcode, Group, Settings, Plus, BookStack, Journal } from "iconoir-react";
 import { useUploadModal } from "@/lib/upload-modal-context";
+import { useSettingsModal } from "@/lib/settings-modal-context";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 
 const espaceItems = [
@@ -102,6 +103,7 @@ function SectionLabel({ label }: { label: string }) {
 export default function Sidebar() {
   const pathname = usePathname();
   const { openModal } = useUploadModal();
+  const { openSettings } = useSettingsModal();
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -187,18 +189,22 @@ export default function Sidebar() {
           <Plus width={14} height={14} strokeWidth={2.25} style={{ color: "inherit" }} />
           <span className="flex-1 text-left">Nouveau Dossier</span>
           <KbdGroup className="gap-0.5 opacity-60">
-            <Kbd className="text-[10px] px-1 py-px rounded-[4px] border-0 shadow-none leading-none" style={{ background: "rgba(255,112,181,0.2)", color: "var(--color-primary)" }}>⌘</Kbd>
-            <Kbd className="text-[10px] px-1 py-px rounded-[4px] border-0 shadow-none leading-none" style={{ background: "rgba(255,112,181,0.2)", color: "var(--color-primary)" }}>N</Kbd>
+            <Kbd className="text-[10px] px-1 py-px rounded-[4px] border-0 shadow-none leading-none" style={{ background: "rgba(255,112,181,0.14)", color: "var(--color-primary)" }}>⌘</Kbd>
+            <Kbd className="text-[10px] px-1 py-px rounded-[4px] border-0 shadow-none leading-none" style={{ background: "rgba(255,112,181,0.14)", color: "var(--color-primary)" }}>N</Kbd>
           </KbdGroup>
         </button>
 
         {/* Paramètres */}
-        <NavLink
-          href="/dashboard/parametres"
-          label="Paramètres"
-          icon={Settings}
-          active={isActive("/dashboard/parametres")}
-        />
+        <button
+          onClick={openSettings}
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-75 w-full text-left"
+          style={{ color: "var(--color-text-tertiary)", background: "transparent", fontWeight: 400 }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(13,15,20,0.06)"; (e.currentTarget as HTMLElement).style.color = "var(--color-text)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--color-text-tertiary)"; }}
+        >
+          <Settings width={16} height={16} strokeWidth={1.5} style={{ color: "inherit", flexShrink: 0 }} />
+          <span className="tracking-tight">Paramètres</span>
+        </button>
       </div>
     </aside>
   );

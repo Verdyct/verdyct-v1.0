@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { FilterList, NavArrowRight, NavArrowLeft, ArrowUpRight, EditPencil, Check, OpenNewWindow, Lock, CloudUpload } from "iconoir-react";
+import { FilterList, NavArrowRight, NavArrowLeft, ArrowUpRight, EditPencil, Check, CheckCircle, Clock, WarningTriangle, Leaf, OpenNewWindow, Lock, CloudUpload } from "iconoir-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
@@ -10,11 +10,11 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 export type Statut = "Validé" | "En attente" | "CBAM" | "Conflit";
 
-export const statutConfig: Record<Statut, { bg: string; color: string }> = {
-  "Validé":     { bg: "rgba(22,163,74,0.08)",  color: "#15803d" },
-  "En attente": { bg: "rgba(217,119,6,0.09)",  color: "#b45309" },
-  "CBAM":       { bg: "rgba(234,88,12,0.08)",  color: "#c2410c" },
-  "Conflit":    { bg: "rgba(220,38,38,0.08)",  color: "#dc2626" },
+export const statutConfig: Record<Statut, { bg: string; color: string; icon: React.ElementType }> = {
+  "Validé":     { bg: "rgba(22,163,74,0.08)",  color: "#15803d", icon: CheckCircle },
+  "En attente": { bg: "rgba(217,119,6,0.09)",  color: "#b45309", icon: Clock },
+  "CBAM":       { bg: "rgba(234,88,12,0.08)",  color: "#c2410c", icon: Leaf },
+  "Conflit":    { bg: "rgba(220,38,38,0.08)",  color: "#dc2626", icon: WarningTriangle },
 };
 
 export interface Dossier {
@@ -22,48 +22,49 @@ export interface Dossier {
   importateur: string;
   statut: Statut;
   flags: string[];
+  date: string;
 }
 
 export const ALL_DOSSIERS: Dossier[] = [
-  { ref: "#2026-0184", importateur: "Dupont Métaux SARL",            statut: "Validé",     flags: ["BTI"] },
-  { ref: "#2026-0183", importateur: "Acier Normandie SAS",           statut: "En attente", flags: [] },
-  { ref: "#2026-0182", importateur: "Import Express Lyon",           statut: "CBAM",       flags: ["CBAM", "EUR.1"] },
-  { ref: "#2026-0181", importateur: "Plastiques Réunis SARL",        statut: "Conflit",    flags: [] },
-  { ref: "#2026-0180", importateur: "Métal Service Rhône",           statut: "Validé",     flags: ["BTI"] },
-  { ref: "#2026-0179", importateur: "Électro Import Bretagne",       statut: "En attente", flags: ["CBAM"] },
-  { ref: "#2026-0178", importateur: "Transports Pellerin & Fils",    statut: "Validé",     flags: [] },
-  { ref: "#2026-0177", importateur: "Acier Atlantique EURL",         statut: "CBAM",       flags: ["EUR.1"] },
-  { ref: "#2026-0176", importateur: "Textile Horizon SAS",           statut: "Validé",     flags: [] },
-  { ref: "#2026-0175", importateur: "Chimie Provence SARL",          statut: "En attente", flags: ["BTI"] },
-  { ref: "#2026-0174", importateur: "Bureau Import SARL",            statut: "Validé",     flags: [] },
-  { ref: "#2026-0173", importateur: "Équipements Est SAS",           statut: "CBAM",       flags: ["CBAM"] },
-  { ref: "#2026-0172", importateur: "Bois & Matériaux EURL",         statut: "Conflit",    flags: [] },
-  { ref: "#2026-0171", importateur: "Agro-Import Sud SARL",          statut: "Validé",     flags: [] },
-  { ref: "#2026-0170", importateur: "Fonderie du Nord SAS",          statut: "En attente", flags: ["EUR.1"] },
-  { ref: "#2026-0169", importateur: "Négoce Méditerranée EURL",      statut: "Validé",     flags: ["BTI"] },
-  { ref: "#2026-0168", importateur: "Pièces Auto Import SA",         statut: "CBAM",       flags: ["CBAM", "BTI"] },
-  { ref: "#2026-0167", importateur: "Logistique Garonne SARL",       statut: "Validé",     flags: [] },
-  { ref: "#2026-0166", importateur: "Groupe Ferraille Ouest",        statut: "Conflit",    flags: ["EUR.1"] },
-  { ref: "#2026-0165", importateur: "Packaging Premium SAS",         statut: "En attente", flags: [] },
-  { ref: "#2026-0164", importateur: "Matières Premières Alsace",     statut: "Validé",     flags: [] },
-  { ref: "#2026-0163", importateur: "Électronique Grand Est SARL",   statut: "En attente", flags: ["CBAM"] },
-  { ref: "#2026-0162", importateur: "Chaudronnerie Bourgogne SAS",   statut: "CBAM",       flags: [] },
-  { ref: "#2026-0161", importateur: "Visserie & Fixations Rhône",    statut: "Validé",     flags: ["BTI"] },
-  { ref: "#2026-0160", importateur: "France Import Céramique",       statut: "Validé",     flags: [] },
-  { ref: "#2026-0159", importateur: "Pneumatiques Atlantique SARL",  statut: "Conflit",    flags: [] },
-  { ref: "#2026-0158", importateur: "Industries Légères du Centre",  statut: "En attente", flags: ["EUR.1"] },
-  { ref: "#2026-0157", importateur: "Dupont Métaux SARL",            statut: "Validé",     flags: [] },
-  { ref: "#2026-0156", importateur: "Acier Normandie SAS",           statut: "CBAM",       flags: ["CBAM"] },
-  { ref: "#2026-0155", importateur: "Métal Service Rhône",           statut: "Validé",     flags: ["BTI", "EUR.1"] },
-  { ref: "#2026-0154", importateur: "Composants Méca Paris SAS",     statut: "En attente", flags: [] },
-  { ref: "#2026-0153", importateur: "Thermoformage Aquitaine EURL",  statut: "Validé",     flags: [] },
-  { ref: "#2026-0152", importateur: "Import Express Lyon",           statut: "CBAM",       flags: ["EUR.1"] },
-  { ref: "#2026-0151", importateur: "Distributeur Pro Lille SARL",   statut: "Conflit",    flags: [] },
-  { ref: "#2026-0150", importateur: "Acier Atlantique EURL",         statut: "Validé",     flags: ["BTI"] },
+  { ref: "#2026-0184", importateur: "Dupont Métaux SARL",            statut: "Validé",     flags: ["BTI"],          date: "15 mai 2026" },
+  { ref: "#2026-0183", importateur: "Acier Normandie SAS",           statut: "En attente", flags: [],               date: "15 mai 2026" },
+  { ref: "#2026-0182", importateur: "Import Express Lyon",           statut: "CBAM",       flags: ["CBAM", "EUR.1"],date: "14 mai 2026" },
+  { ref: "#2026-0181", importateur: "Plastiques Réunis SARL",        statut: "Conflit",    flags: [],               date: "14 mai 2026" },
+  { ref: "#2026-0180", importateur: "Métal Service Rhône",           statut: "Validé",     flags: ["BTI"],          date: "13 mai 2026" },
+  { ref: "#2026-0179", importateur: "Électro Import Bretagne",       statut: "En attente", flags: ["CBAM"],         date: "13 mai 2026" },
+  { ref: "#2026-0178", importateur: "Transports Pellerin & Fils",    statut: "Validé",     flags: [],               date: "12 mai 2026" },
+  { ref: "#2026-0177", importateur: "Acier Atlantique EURL",         statut: "CBAM",       flags: ["EUR.1"],        date: "12 mai 2026" },
+  { ref: "#2026-0176", importateur: "Textile Horizon SAS",           statut: "Validé",     flags: [],               date: "11 mai 2026" },
+  { ref: "#2026-0175", importateur: "Chimie Provence SARL",          statut: "En attente", flags: ["BTI"],          date: "11 mai 2026" },
+  { ref: "#2026-0174", importateur: "Bureau Import SARL",            statut: "Validé",     flags: [],               date: "10 mai 2026" },
+  { ref: "#2026-0173", importateur: "Équipements Est SAS",           statut: "CBAM",       flags: ["CBAM"],         date: "10 mai 2026" },
+  { ref: "#2026-0172", importateur: "Bois & Matériaux EURL",         statut: "Conflit",    flags: [],               date: "9 mai 2026"  },
+  { ref: "#2026-0171", importateur: "Agro-Import Sud SARL",          statut: "Validé",     flags: [],               date: "9 mai 2026"  },
+  { ref: "#2026-0170", importateur: "Fonderie du Nord SAS",          statut: "En attente", flags: ["EUR.1"],        date: "8 mai 2026"  },
+  { ref: "#2026-0169", importateur: "Négoce Méditerranée EURL",      statut: "Validé",     flags: ["BTI"],          date: "8 mai 2026"  },
+  { ref: "#2026-0168", importateur: "Pièces Auto Import SA",         statut: "CBAM",       flags: ["CBAM", "BTI"],  date: "7 mai 2026"  },
+  { ref: "#2026-0167", importateur: "Logistique Garonne SARL",       statut: "Validé",     flags: [],               date: "7 mai 2026"  },
+  { ref: "#2026-0166", importateur: "Groupe Ferraille Ouest",        statut: "Conflit",    flags: ["EUR.1"],        date: "6 mai 2026"  },
+  { ref: "#2026-0165", importateur: "Packaging Premium SAS",         statut: "En attente", flags: [],               date: "6 mai 2026"  },
+  { ref: "#2026-0164", importateur: "Matières Premières Alsace",     statut: "Validé",     flags: [],               date: "5 mai 2026"  },
+  { ref: "#2026-0163", importateur: "Électronique Grand Est SARL",   statut: "En attente", flags: ["CBAM"],         date: "5 mai 2026"  },
+  { ref: "#2026-0162", importateur: "Chaudronnerie Bourgogne SAS",   statut: "CBAM",       flags: [],               date: "4 mai 2026"  },
+  { ref: "#2026-0161", importateur: "Visserie & Fixations Rhône",    statut: "Validé",     flags: ["BTI"],          date: "4 mai 2026"  },
+  { ref: "#2026-0160", importateur: "France Import Céramique",       statut: "Validé",     flags: [],               date: "3 mai 2026"  },
+  { ref: "#2026-0159", importateur: "Pneumatiques Atlantique SARL",  statut: "Conflit",    flags: [],               date: "3 mai 2026"  },
+  { ref: "#2026-0158", importateur: "Industries Légères du Centre",  statut: "En attente", flags: ["EUR.1"],        date: "2 mai 2026"  },
+  { ref: "#2026-0157", importateur: "Dupont Métaux SARL",            statut: "Validé",     flags: [],               date: "2 mai 2026"  },
+  { ref: "#2026-0156", importateur: "Acier Normandie SAS",           statut: "CBAM",       flags: ["CBAM"],         date: "1 mai 2026"  },
+  { ref: "#2026-0155", importateur: "Métal Service Rhône",           statut: "Validé",     flags: ["BTI", "EUR.1"], date: "1 mai 2026"  },
+  { ref: "#2026-0154", importateur: "Composants Méca Paris SAS",     statut: "En attente", flags: [],               date: "30 avr. 2026"},
+  { ref: "#2026-0153", importateur: "Thermoformage Aquitaine EURL",  statut: "Validé",     flags: [],               date: "30 avr. 2026"},
+  { ref: "#2026-0152", importateur: "Import Express Lyon",           statut: "CBAM",       flags: ["EUR.1"],        date: "29 avr. 2026"},
+  { ref: "#2026-0151", importateur: "Distributeur Pro Lille SARL",   statut: "Conflit",    flags: [],               date: "29 avr. 2026"},
+  { ref: "#2026-0150", importateur: "Acier Atlantique EURL",         statut: "Validé",     flags: ["BTI"],          date: "28 avr. 2026"},
 ];
 
 const dossiers = ALL_DOSSIERS.slice(0, 8);
-const COLS = "150px 1fr 130px 100px 24px";
+const COLS = "150px 1fr 110px 130px 100px 24px";
 
 // ─── Row state ────────────────────────────────────────────────────────────────
 
@@ -840,7 +841,8 @@ export function DossierDrawer({
               <div className="flex items-center gap-2 mb-1.5">
                 <span className="text-[13px]" style={{ color: "var(--color-text-secondary)" }}>{dossier?.ref}</span>
                 {badge && (
-                  <span className="inline-flex items-center text-[12px] px-2 py-0.5 rounded-md" style={{ background: badge.bg, color: badge.color }}>
+                  <span className="inline-flex items-center gap-1.5 text-[12px] px-2 py-0.5 rounded-md" style={{ background: badge.bg, color: badge.color }}>
+                    <badge.icon width={11} height={11} strokeWidth={2} style={{ color: "inherit", flexShrink: 0 }} />
                     {dossier?.statut}
                   </span>
                 )}
@@ -1411,7 +1413,7 @@ export default function DossiersTable() {
             className="grid items-center px-5 py-2 border-b shrink-0"
             style={{ gridTemplateColumns: COLS, borderColor: "var(--color-border)" }}
           >
-            {["Référence", "Importateur", "Statut", "Flags", ""].map((col) => (
+            {["Référence", "Importateur", "Date", "Statut", "Flags", ""].map((col) => (
               <span key={col} className="text-[12px]" style={{ color: "var(--color-text-tertiary)" }}>{col}</span>
             ))}
           </div>
@@ -1437,11 +1439,13 @@ export default function DossiersTable() {
                 >
                   <span className="text-[13px]" style={{ color: "var(--color-text-secondary)" }}>{d.ref}</span>
                   <span className="text-[13.5px] truncate pr-4" style={{ color: "var(--color-text)" }}>{d.importateur}</span>
+                  <span className="text-[12px] tabular-nums" style={{ color: "var(--color-text-tertiary)" }}>{d.date}</span>
                   <div className="flex items-center">
                     <span
-                      className="inline-flex items-center text-[12px] px-2 py-0.5 rounded-md"
+                      className="inline-flex items-center gap-1.5 text-[12px] px-2 py-0.5 rounded-md"
                       style={{ background: badge.bg, color: badge.color }}
                     >
+                      <badge.icon width={11} height={11} strokeWidth={2} style={{ color: "inherit", flexShrink: 0 }} />
                       {d.statut}
                     </span>
                   </div>
